@@ -1,0 +1,86 @@
+<style>
+    table{
+        border-collapse:collapse;
+    }
+
+    table,td,tr,th{
+        border: 1px solid black;
+    }
+</style>
+
+{{#with data}}
+   
+    <h1>欢迎 <span style="color: red">{{username}}</span>登录</h1>
+    <h1>登录后查看书籍</h1>
+    <hr>
+
+    {{#if list}}
+     <br>
+     <a href="javascript:;" onclick="renew()">恢复删除数据</a>
+     <h2>添加书籍</h2>
+    <form method="POST" action="/ling/book/addItem"  id="updateForm">
+        书名：<input type="text" name="bookName" placeholder="书名"  id="bookName" />
+        作者 <input type="text" name="author" placeholder="作者" id="author"> 
+        <input type="hidden" name="status" placeholder="作者" value="1"> 
+        <input type="submit" value="确定">
+    </form>
+    <h2>添加列表</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>书名</th>
+            <th>性别</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+            {{#each list as |item| }}
+
+            {{#if item.status}}
+            <tr id="tr{{@index}}">
+                <td>{{item.bookName}}</td>
+                <td>{{item.author}}</td>
+                <td>
+                    <a href="/ling/book/delItem?id={{item._id}}" onclick="deleteItem()" data-book='{{item.bookName}}'>删除</a>
+                    <a href="/ling/book/updateItem?id={{item._id}}" onclick="update(event)" data-author='{{item.author}}'>编辑</a>
+                </td>
+            </tr>
+            {{/if}}
+            {{/each}}
+        </tbody>
+    </table>
+    {{else}}
+    <p>
+        <a href="/ling/login">去登录</a>
+    </p>
+  {{/if}}
+{{/with}}
+
+<script>
+var updateForm = document.getElementById("updateForm");
+var bookName = document.getElementById("bookName");
+var author = document.getElementById("author");
+var  update = function(e){
+    console.log(e)
+}
+
+var renew = function(){
+    sendAjax('POST','/ling/book/restory');
+    window.location.reload();
+}
+
+
+function sendAjax(method,url){
+    var xhr = new XMLHttpRequest();
+    xhr.open(method, url);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
+        if (xhr.status === 200 &&  xhr.status <= 400) {
+            // alert('发生错误.  当前用户名是：' + xhr.responseText);
+        }else if (xhr.status !== 200) {
+            // alert('请求失败，返回状态：' + xhr.status);
+        }
+    };
+    xhr.send();
+}
+</script>

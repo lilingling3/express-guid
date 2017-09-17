@@ -1,0 +1,15 @@
+<h1>编辑书籍</h1>
+{{#with data}}
+    <form method="POST" action=""  id="updateForm">
+        <input type="hidden" name="id" value="{{temp._id}}">
+        书名：<input type="text" name="bookName" placeholder="书名"  id="bookName" value="{{temp.bookName}}"/>
+        作者 <input type="text" name="author" placeholder="作者" id="author" value="{{temp.author}}"> 
+        <input type="submit" value="确定">
+    </form>
+    
+{{/with}}
+
+<script>
+
+
+</script>
